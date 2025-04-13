@@ -67,9 +67,40 @@
                 android:layout_height="wrap_content"
                 android:text="text"
                 android:textSize="15sp" />
+                
+            <RadioButton
+                android:id="@+id/rb_packet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="packet"
+                android:textSize="15sp" />
 
         </RadioGroup>
 
+        <!-- Packet配置区域 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:id="@+id/packet_config"
+            android:visibility="gone">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textField_cmd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="cmd">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/cmd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -103,10 +134,6 @@
                 android:backgroundTint="#EB8B40"
                 android:textColor="@color/white"
                 />
-
-
-
-
 
         </LinearLayout>
 
@@ -280,11 +307,7 @@
                             app:cornerRadius="25dp"
                             android:backgroundTint="#37FFFFFF"
                             android:textColor="@color/firstTextColor"
-
                             />
-
-
-
 
                     </LinearLayout>
 
@@ -295,26 +318,10 @@
                         android:gravity="center"
                         android:orientation="vertical"
                         android:padding="10dp">
-
-                        <EditText
-                            android:id="@+id/content"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:visibility="gone"
-                            android:background="@null"
-                            />
                     </LinearLayout>
-
-
                 </LinearLayout>
-
             </androidx.cardview.widget.CardView>
-
-
         </LinearLayout>
-
-
     </ScrollView>
     </LinearLayout>
-
 </moe.ono.ui.view.RadiusCardView>
