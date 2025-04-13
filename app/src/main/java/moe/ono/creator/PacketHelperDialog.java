@@ -106,6 +106,8 @@ public class PacketHelperDialog extends BottomPopupView {
     public static EditText etDesc;
     public static EditText etHint;
     public static EditText etNickname;
+    //添加CMD输入框
+    public static TextInputEditText etCmd;
     private static String preContent;
     private static Dialog elem_dialog = null;
     private static View decorView;
@@ -121,7 +123,8 @@ public class PacketHelperDialog extends BottomPopupView {
     private static RadioGroup mRgSendType;
     public static RadioGroup mRgSendBy;
     public static CheckBox mRbXmlForward;
-
+    //添加packet配置区域
+    private static LinearLayout packetConfigLayout;
 
 
     public PacketHelperDialog(@NonNull Context context) {
@@ -163,6 +166,8 @@ public class PacketHelperDialog extends BottomPopupView {
             etDesc = findViewById(R.id.desc);
             etHint = findViewById(R.id.hint);
             etNickname = findViewById(R.id.nickname);
+            // 初始化CMD输入框
+            etCmd = findViewById(R.id.cmd);
 
             mRgSendType = findViewById(R.id.rg_send_type);
             mRgSendBy = findViewById(R.id.rg_send_by);
@@ -176,6 +181,10 @@ public class PacketHelperDialog extends BottomPopupView {
 
             LinearLayout forwardConfig = findViewById(R.id.forward_config);
             forwardConfig.setVisibility(GONE);
+            
+            // 初始化packet配置区域
+            packetConfigLayout = findViewById(R.id.packet_config);
+            packetConfigLayout.setVisibility(GONE);
 
             editText.clearFocus();
             editText.setVisibility(VISIBLE);
@@ -263,6 +272,12 @@ public class PacketHelperDialog extends BottomPopupView {
                         mRgSendBy.setVisibility(GONE);
                         forwardConfig.setVisibility(GONE);
                         break;
+                    case "packet":
+                        editText.setHint("raw packet...");
+                        mRgSendBy.setVisibility(GONE);
+                        forwardConfig.setVisibility(GONE);
+                        packetConfigLayout.setVisibility(VISIBLE);
+                        break;
                 }
             });
 
@@ -297,6 +312,15 @@ public class PacketHelperDialog extends BottomPopupView {
                     return;
                 } else if (send_type.equals("text")){
                     send_text_msg(text, contactCompat);
+                    return;
+                } else if (send_type.equals("packet")) {
+                    // 获取CMD值
+                    String cmd = etCmd.getText().toString().trim();
+                    if (cmd.isEmpty()) {
+                        Toasts.error(getContext(), "请输入cmd值");
+                        return;
+                    }
+                    send_packet_msg(text, cmd);
                     return;
                 }
 
@@ -714,6 +738,22 @@ public class PacketHelperDialog extends BottomPopupView {
         Nt_kernel_bridge.send_msg(contactCompat, elements);
     }
 
+    //发送packet消息的方法
+    private void send_packet_msg(String content, String cmd) {
+        try {
+            boolean success = QPacketHelperKt.sendPacket(cmd, content);
+            if (success) {
+                Toasts.success(getContext(), "发送成功");
+                dismiss();
+            } else {
+                Toasts.error(getContext(), "发送失败");
+            }
+        } catch (Exception e) {
+            Logger.e("发送Packet消息失败", e);
+            Toasts.error(getContext(), "发送失败: " + e.getMessage());
+        }
+    }
+    
     @SuppressLint("SetTextI18n")
     private void showRepeatSendDialog(String content, String uid, boolean isGroupMsg, String type, ContactCompat contactCompat) {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
