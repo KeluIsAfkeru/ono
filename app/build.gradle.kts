@@ -147,17 +147,6 @@ kotlin {
     }
 }
 
-androidComponents.onVariants { variant ->
-    val variantCapped = variant.name.capitalizeUS()
-    val installAndRestartTask = tasks.named("install${variantCapped}AndRestartQQ")
-
-    afterEvaluate {
-        tasks.findByName("assemble${variantCapped}")?.let { assembleTask ->
-            assembleTask.finalizedBy(installAndRestartTask)
-        } ?: println("Task assemble${variantCapped} not found.")
-    }
-}
-
 protobuf {
     protoc {
         artifact = libs.google.protobuf.protoc.get().toString()
