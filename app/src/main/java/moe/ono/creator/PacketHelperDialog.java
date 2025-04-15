@@ -743,13 +743,15 @@ public class PacketHelperDialog extends BottomPopupView {
         Nt_kernel_bridge.send_msg(contactCompat, elements);
     }
 
-    //发送packet消息的方法
-private void send_packet_msg(text: String, cmd: String) {
+/**
+ * 发送packet消息的方法
+ */
+private void send_packet_msg(String text, String cmd) {
     try {
         //将消息内容转为字节数组
-        var body = QPacketHelperKt.buildMessage(text);
-        var verName = HostInfo.getVersionName();
-        var isProto = true;
+        byte[] body = QPacketHelperKt.buildMessage(text);
+        String verName = HostInfo.getVersionName();
+        boolean isProto = true;
         
         String sp = cmd.replace("OidbSvc.", "").replace("oidb_", "");
         String[] parts = sp.split("_");
@@ -770,13 +772,17 @@ private void send_packet_msg(text: String, cmd: String) {
         byte[] encodedData = oidbPkg.toByteArray();
         QQInterfaces.sendBuffer(cmd, true, encodedData);
 
-    } catch (e: Exception) {
+    } catch (Exception e) {
         e.printStackTrace();
-        Toasts.error(getContext(), "发送失败: ${e.message}");
+        Toasts.error(getContext(), "发送失败: " + e.getMessage());
     }
 }
 
-    private void showResultDialog(String result) {
+/**
+ * 显示结果弹窗
+ * @param result 要显示的结果字符串
+ */
+private void showResultDialog(String result) {
     //创建弹窗
     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
     builder.setTitle("发包返回结果");
