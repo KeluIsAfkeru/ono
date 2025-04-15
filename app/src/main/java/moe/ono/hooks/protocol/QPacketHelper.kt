@@ -103,16 +103,14 @@ fun sendMessage(content: String, id: String, isGroupMsg: Boolean, type: String) 
  * @param cmd The command string.
  * @param content A JSON formatted string containing the data to be sent.
  */
+@JvmOverloads
 fun sendPacket(
     cmd: String, 
     content: String,
-    onResponse: ((FromServiceMsg) -> Unit)? = null //可选回调
+    onResponse: ((FromServiceMsg) -> Unit)? = null
 ) {
     QQInterfaces.sendBuffer(cmd, true, buildMessage(content), onResponse)
 }
-
-@JvmStatic
-fun sendPacket(cmd: String, content: String) = sendPacket(cmd, content, null)
 
 /**
  * 发送原始消息包
@@ -121,6 +119,7 @@ fun sendPacket(cmd: String, content: String) = sendPacket(cmd, content, null)
  * @param content 原始字节数据
  * @param onResponse 可选回调接收FromServiceMsg
  */
+ @JvmOverloads
 fun sendRawPacket(
     cmd: String,
     isProto: Boolean,
@@ -129,9 +128,6 @@ fun sendRawPacket(
 ) {
     QQInterfaces.sendBuffer(cmd, isProto, content, onResponse)
 }
-
-@JvmStatic
-fun sendRawPacket(cmd: String, isProto: Boolean, content: String) = sendRawPacket(cmd, isProto, content, null)
 
 /**
  * 构建OIDB协议的ByteArray（直接传入JsonObject）
