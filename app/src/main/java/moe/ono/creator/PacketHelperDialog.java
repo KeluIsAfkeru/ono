@@ -96,6 +96,10 @@ i/mport moe.ono.ui.CommonContextWrapper;
 import moe.ono.util.Logger;
 import moe.ono.util.SafUtils;
 import moe.ono.util.SyncUtils;
+import moe.ono.util.HostInfo;
+import tencent.im.oidb.oidb_sso.OIDBSSOPkg;
+import com.tencent.mobileqq.pb.ByteStringMicro
+import com.tencent.mobileqq.pb.MessageMicro
 
 @SuppressLint({"ResourceType", "StaticFieldLeak"})
 public class PacketHelperDialog extends BottomPopupView {
@@ -743,25 +747,32 @@ public class PacketHelperDialog extends BottomPopupView {
 private fun send_packet_msg(text: String, cmd: String) {
     try {
         //将消息内容转为字节数组
-        val data = QPacketHelperKt.buildMessage(text)
-        val isProto = true
+        var body = QPacketHelperKt.buildMessage(text);
+        var verName = HostInfo.getVersionName();
+        var isProto = true;
+        
+        String sp = cmd.replace("OidbSvc.", "").replace("oidb_", "");
+        String[] parts = sp.split("_");
+        int cmdFlag = Integer.parseInt(parts[0], 16);  //16进制解析cmdflag
+        int serviceType = parts.length > 1 ? Integer.parseInt(parts[1]) : 1;  //servicetype
 
-        QQInterfaces.sendBufferWithResponse(cmd, isProto, data) { response ->
-            //处理结果
-            val result = if (response != null) {
-                response.toString()
-            } else {
-                "未返回结果"
-            }
+        byte[] body = QPacketHelperKt.buildMessage(text);
+        String verName = HostInfo.getVersionName();
 
-            (getContext() as Activity).runOnUiThread {
-                showResultDialog(result)
-            }
-        }
+        //构造OIDBSSO包
+        OIDBSSOPkg oidbPkg = new OIDBSSOPkg();
+        oidbPkg.uint32_command.set(cmdFlag);          
+        oidbPkg.uint32_service_type.set(serviceType);  
+        oidbPkg.uint32_result.set(0);                
+        oidbPkg.str_client_version.set("android " + verName);
+        oidbPkg.bytes_bodybuffer.set(ByteStringMicro.copyFrom(body));
+
+        byte[] encodedData = oidbPkg.toByteArray();
+        QQInterfaces.sendBuffer(cmd, true, encodedData);
 
     } catch (e: Exception) {
-        e.printStackTrace()
-        Toasts.error(getContext(), "发送失败: ${e.message}")
+        e.printStackTrace();
+        Toasts.error(getContext(), "发送失败: ${e.message}");
     }
 }
 
