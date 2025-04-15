@@ -752,7 +752,8 @@ public class PacketHelperDialog extends BottomPopupView {
 private void send_packet_msg(String text, String cmd) {
     try {
         //将消息内容转为字节数组
-        byte[] body = QPacketHelperKt.buildMessage(text);
+        //byte[] body = QPacketHelperKt.buildMessage(text);
+        JsonElement body =QPacketHelperKt.buildMessageJson(text);
         String verName = HostInfo.getVersionName();
         byte[] cmdBytes;
         boolean isProto = true;
@@ -763,7 +764,7 @@ private void send_packet_msg(String text, String cmd) {
             cmdBytes = QPacketHelperKt.buildOidbSvcBytes(cmd, isProto, body, verName);
         } else {
             //其他cmd
-            cmdBytes = body;
+            cmdBytes = QPacketHelperKt.buildMessage(text);
         }
         QPacketHelperKt.sendRawPacket(cmd, isProto, cmdBytes);
         

@@ -116,7 +116,7 @@ fun sendRawPacket(cmd: String,isProto:Boolean, content: ByteArray) {
  * @param bodyJson 请求体
  * @param version 版本号（如 "9.1.60"）
  */
-fun buildOidbSvcBytes(cmd: String, isProto: Boolean, bodyJson: JsonObject, version: String): ByteArray {
+fun buildOidbSvcBytes(cmd: String, isProto: Boolean, bodyJson: JsonElement, version: String): ByteArray {
     val sp = cmd
         .replace("OidbSvc.", "")
         .replace("oidb_", "")
@@ -144,7 +144,7 @@ fun buildOidbSvcBytes(cmd: String, isProto: Boolean, bodyJson: JsonObject, versi
  * @param bodyJson 请求体（JsonObject）
  * @param version 版本号（如 "9.1.60"）
  */
-fun buildOidbSvcTrpcBytes(cmd: String, isProto: Boolean, bodyJson: JsonObject, version: String): ByteArray {
+fun buildOidbSvcTrpcBytes(cmd: String, isProto: Boolean, bodyJson: JsonElement, version: String): ByteArray {
     val sp = cmd
         .replace("OidbSvcTrpcTcp.", "")
         .replace("oidb_", "")
@@ -179,11 +179,9 @@ fun buildMessage(content: String): ByteArray {
     return encodeMessage(map)
 }
 
-fun buildMessageJson(content: String): ByteArray {
+fun buildMessageJson(content: String): JsonElement {
     val json = Json { ignoreUnknownKeys = true }
-    val parsedJsonElement: JsonElement = json.parseToJsonElement(content)
-    val map = parseJsonToMap(parsedJsonElement)
-    return encodeMessage(map)
+    return json.parseToJsonElement(content)
 }
 
 /**
