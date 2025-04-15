@@ -30,5 +30,26 @@ abstract class QQInterfaces {
             toServiceMsg.addAttribute("req_pb_protocol_flag", isProto)
             sendToServiceMsg(toServiceMsg)
         }
+//新加一个可以回调的发包函数
+        fun sendBufferWithResponse(
+    cmd: String,
+    isProto: Boolean,
+    data: ByteArray,
+    callback: (response: Any?) -> Unit // 添加一个回调函数
+) {
+    val toServiceMsg = createToServiceMsg(cmd)
+    toServiceMsg.putWupBuffer(data)
+    toServiceMsg.addAttribute("req_pb_protocol_flag", isProto)
+    toServiceMsg.needResp = true //标记哈是否需要响应
+
+    //响应回调
+    toServiceMsg.actionListener = object : IBaseActionListener.Stub() {
+        override fun onActionResult(response: Any?) {
+            callback(response) //回调返回结果
+        }
+    }
+
+    sendToServiceMsg(toServiceMsg)
+        }
     }
 }
