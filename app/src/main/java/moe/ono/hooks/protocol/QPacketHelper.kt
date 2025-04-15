@@ -9,6 +9,7 @@ import moe.ono.service.QQInterfaces
 import com.google.protobuf.CodedOutputStream
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.encodeToString
+import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.*
 import moe.ono.BuildConfig
 import java.io.ByteArrayOutputStream
@@ -106,6 +107,81 @@ fun sendPacket(cmd: String, content: String) {
 //不会重新构建content
 fun sendRawPacket(cmd: String,isProto:Boolean, content: ByteArray) {
     QQInterfaces.sendBuffer(cmd, isProto, content)
+}
+
+/**
+ * 构建OIDB协议的ByteArray
+ * @param cmd 命令字符串，如 "OidbSvc.0x568_22" 或 "oidb_568_22"
+ * @param isProto 是否为ProtoBuf
+ * @param body 请求体
+ * @param version 版本号（如 "9.1.60"）
+ */
+fun buildOidbSvcBytes(cmd: String, isProto: Boolean, body: ByteArray, version: String): ByteArray {
+    //解析cmd
+    val sp = cmd
+        .replace("OidbSvc.", "")
+        .replace("oidb_", "")
+        .split("_")
+
+    val type1 = sp[0].replace("0x", "").toInt(16) 
+    val type2 = if (sp.size > 1) sp[1].toInt() else 1
+
+    val bodyJson = try {
+        Json.decodeFromString<JsonObject>(body.decodeToString())
+    } catch (e: Exception) {
+        throw IllegalArgumentException("Failed to parse body ByteArray to JsonObject", e)
+    }
+
+    val json = buildJsonObject {
+        put("1", JsonPrimitive(type1))
+        put("2", JsonPrimitive(type2))
+        put("3", JsonPrimitive(0))
+        put("4", bodyJson)
+        put("6", JsonPrimitive("android $version"))
+    }
+
+    val map = parseJsonToMap(json)
+        
+    val byteArray = encodeMessage(map)
+    
+    return byteArray
+}
+
+/**
+ * 构建OIDBSvcTrpc的ByteArray
+ * @param cmd 命令字符串，如 "OidbSvc.0x568_22" 或 "oidb_568_22"
+ * @param isProto 是否为ProtoBuf
+ * @param body 请求体
+ * @param version 版本号（如 "9.1.60"）
+ */
+fun buildOidbSvcTrpcBytes(cmd: String, isProto: Boolean, body: ByteArray, version: String): ByteArray {
+    //解析cmd
+    val sp = cmd
+        .replace("OidbSvcTrpcTcp.", "")
+        .replace("oidb_", "")
+        .split("_")
+
+    val type1 = sp[0].replace("0x", "").toInt(16) 
+    val type2 = if (sp.size > 1) sp[1].toInt() else 1
+
+    val bodyJson = try {
+        Json.decodeFromString<JsonObject>(body.decodeToString())
+    } catch (e: Exception) {
+        throw IllegalArgumentException("Failed to parse body ByteArray to JsonObject", e)
+    }
+
+    val json = buildJsonObject {
+        put("1", JsonPrimitive(type1))
+        put("2", JsonPrimitive(type2))
+        put("4", bodyJson)
+        put("6", JsonPrimitive("android $version"))
+    }
+
+    val map = parseJsonToMap(json)
+        
+    val byteArray = encodeMessage(map)
+    
+    return byteArray
 }
 
 /**

@@ -754,8 +754,20 @@ private void send_packet_msg(String text, String cmd) {
         //将消息内容转为字节数组
         byte[] body = QPacketHelperKt.buildMessage(text);
         String verName = HostInfo.getVersionName();
+        byte[] cmdBytes;
         boolean isProto = true;
         
+        if (cmd.startsWith("OidbSvcTrpcTcp")) {
+            byte[] cmdBytes = QPacketHelperKt.buildOidbSvcTrpcBytes(cmd, isProto, body, verName);
+        } else if (cmd.startsWith("OidbSvc")) {
+            byte[] cmdBytes = QPacketHelperKt.buildOidbSvcBytes(cmd, isProto, body, verName);
+        } else {
+            //其他cmd
+            byte[] cmdBytes = body;
+        }
+        QPacketHelperKt.sendRawPacket(cmd, isProto, cmdBytes);
+        
+        /*
         String sp = cmd.replace("OidbSvc.", "").replace("oidb_", "");
         String[] parts = sp.split("_");
         String hexStr = parts[0].startsWith("0x") ? parts[0].substring(2) : parts[0];
@@ -772,7 +784,7 @@ private void send_packet_msg(String text, String cmd) {
         oidbPkg.bytes_bodybuffer.set(ByteStringMicro.copyFrom(body));
 
         byte[] encodedData = oidbPkg.toByteArray();
-        QPacketHelperKt.sendRawPacket(cmd, isProto, encodedData);
+        QPacketHelperKt.sendRawPacket(cmd, isProto, encodedData); */
         Toasts.success(getContext(), "请求成功" );
 
     } catch (Exception e) {
