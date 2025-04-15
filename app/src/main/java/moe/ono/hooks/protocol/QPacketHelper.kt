@@ -103,6 +103,11 @@ fun sendPacket(cmd: String, content: String) {
     QQInterfaces.sendBuffer(cmd, true, buildMessage(content))
 }
 
+//不会重新构建content
+fun sendRawPacket(cmd: String,isProto:Boolean, content: String) {
+    QQInterfaces.sendBuffer(cmd, isProto, content)
+}
+
 /**
  * Builds a message from the provided content string.
  *

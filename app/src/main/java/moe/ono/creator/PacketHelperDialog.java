@@ -761,7 +761,6 @@ private void send_packet_msg(String text, String cmd) {
         int cmdFlag = Integer.parseInt(parts[0], 16);  //16进制解析cmdflag
         int serviceType = parts.length > 1 ? Integer.parseInt(parts[1]) : 1;  //servicetype
 
-        String verName = HostInfo.getVersionName();
 
         //构造OIDBSSO包
         OIDBSSOPkg oidbPkg = new OIDBSSOPkg();
@@ -772,7 +771,7 @@ private void send_packet_msg(String text, String cmd) {
         oidbPkg.bytes_bodybuffer.set(ByteStringMicro.copyFrom(body));
 
         byte[] encodedData = oidbPkg.toByteArray();
-        QQInterfaces.sendBuffer(cmd, isProto, encodedData);
+        QPacketHelperKt.sendRawPacket(cmd, isProto, encodedData);
 
     } catch (Exception e) {
         e.printStackTrace();
