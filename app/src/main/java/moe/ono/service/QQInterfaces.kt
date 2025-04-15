@@ -3,8 +3,6 @@ package moe.ono.service
 import com.tencent.common.app.AppInterface
 import com.tencent.qphone.base.remote.ToServiceMsg
 import com.tencent.qphone.base.remote.FromServiceMsg
-
-import com.tencent.qphone.base.remote.IBaseActionListener
 import mqq.app.MobileQQ
 
 abstract class QQInterfaces {
