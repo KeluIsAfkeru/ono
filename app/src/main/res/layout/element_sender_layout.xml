@@ -318,6 +318,14 @@
                         android:gravity="center"
                         android:orientation="vertical"
                         android:padding="10dp">
+
+                        <EditText
+                            android:id="@+id/content"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone"
+                            android:background="@null"
+                            />
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
