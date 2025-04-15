@@ -107,7 +107,7 @@ public class PacketHelperDialog extends BottomPopupView {
     public static EditText etHint;
     public static EditText etNickname;
     //添加CMD输入框
-    public static TextInputEditText etCmd;
+    public static EditText etCmd;
     private static String preContent;
     private static Dialog elem_dialog = null;
     private static View decorView;
