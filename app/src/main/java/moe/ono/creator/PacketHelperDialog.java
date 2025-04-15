@@ -739,20 +739,16 @@ public class PacketHelperDialog extends BottomPopupView {
     }
 
     //发送packet消息的方法
-    private void send_packet_msg(String content, String cmd) {
-        try {
-            boolean success = QPacketHelperKt.sendPacket(cmd, content);
-            if (success) {
-                Toasts.success(getContext(), "发送成功");
-                dismiss();
-            } else {
-                Toasts.error(getContext(), "发送失败");
-            }
-        } catch (Exception e) {
-            Logger.e("发送Packet消息失败", e);
-            Toasts.error(getContext(), "发送失败: " + e.getMessage());
-        }
+private void send_packet_msg(String content, String cmd) {
+    try {
+        QPacketHelperKt.sendPacket(cmd, content); 
+        Toasts.success(getContext(), "发送成功");
+        dismiss();
+    } catch (Exception e) {
+        Logger.e("发送Packet消息失败", e);
+        Toasts.error(getContext(), "发送失败: " + e.getMessage());
     }
+}
     
     @SuppressLint("SetTextI18n")
     private void showRepeatSendDialog(String content, String uid, boolean isGroupMsg, String type, ContactCompat contactCompat) {
