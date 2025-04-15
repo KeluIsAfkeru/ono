@@ -758,12 +758,12 @@ private void send_packet_msg(String text, String cmd) {
         boolean isProto = true;
         
         if (cmd.startsWith("OidbSvcTrpcTcp")) {
-            byte[] cmdBytes = QPacketHelperKt.buildOidbSvcTrpcBytes(cmd, isProto, body, verName);
+            cmdBytes = QPacketHelperKt.buildOidbSvcTrpcBytes(cmd, isProto, body, verName);
         } else if (cmd.startsWith("OidbSvc")) {
-            byte[] cmdBytes = QPacketHelperKt.buildOidbSvcBytes(cmd, isProto, body, verName);
+            cmdBytes = QPacketHelperKt.buildOidbSvcBytes(cmd, isProto, body, verName);
         } else {
             //其他cmd
-            byte[] cmdBytes = body;
+            cmdBytes = body;
         }
         QPacketHelperKt.sendRawPacket(cmd, isProto, cmdBytes);
         
