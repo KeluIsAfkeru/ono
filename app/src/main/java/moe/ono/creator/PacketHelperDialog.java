@@ -758,7 +758,8 @@ private void send_packet_msg(String text, String cmd) {
         
         String sp = cmd.replace("OidbSvc.", "").replace("oidb_", "");
         String[] parts = sp.split("_");
-        int cmdFlag = Integer.parseInt(parts[0], 16);  //16进制解析cmdflag
+        String hexStr = parts[0].startsWith("0x") ? parts[0].substring(2) : parts[0];
+     int cmdFlag = Integer.parseInt(hexStr, 16);
         int serviceType = parts.length > 1 ? Integer.parseInt(parts[1]) : 1;  //servicetype
 
 
@@ -772,10 +773,11 @@ private void send_packet_msg(String text, String cmd) {
 
         byte[] encodedData = oidbPkg.toByteArray();
         QPacketHelperKt.sendRawPacket(cmd, isProto, encodedData);
+        Toasts.success(getContext(), "请求成功" );
 
     } catch (Exception e) {
         e.printStackTrace();
-        Toasts.error(getContext(), "发送失败: " + e.getMessage());
+        Toasts.error(getContext(), e.getMessage());
     }
 }
 
