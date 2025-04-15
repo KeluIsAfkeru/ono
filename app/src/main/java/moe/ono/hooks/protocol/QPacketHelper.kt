@@ -15,6 +15,9 @@ import moe.ono.BuildConfig
 import java.io.ByteArrayOutputStream
 import kotlin.random.Random
 import kotlin.random.nextUInt
+import com.tencent.qphone.base.remote.FromServiceMsg
+import com.tencent.qphone.base.remote.ToServiceMsg
+
 
 /**
  * Sends a message by constructing a JSON payload, encoding it to Protobuf, and sending it via QQInterfaces.
@@ -100,13 +103,28 @@ fun sendMessage(content: String, id: String, isGroupMsg: Boolean, type: String) 
  * @param cmd The command string.
  * @param content A JSON formatted string containing the data to be sent.
  */
-fun sendPacket(cmd: String, content: String) {
-    QQInterfaces.sendBuffer(cmd, true, buildMessage(content))
+fun sendPacket(
+    cmd: String, 
+    content: String,
+    onResponse: ((FromServiceMsg) -> Unit)? = null //可选回调
+) {
+    QQInterfaces.sendBuffer(cmd, true, buildMessage(content), onResponse)
 }
 
-//不会重新构建content
-fun sendRawPacket(cmd: String,isProto:Boolean, content: ByteArray) {
-    QQInterfaces.sendBuffer(cmd, isProto, content)
+/**
+ * 发送原始消息包
+ * @param cmd 服务命令
+ * @param isProto 是否使用 Protobuf 协议
+ * @param content 原始字节数据
+ * @param onResponse 可选回调接收FromServiceMsg
+ */
+fun sendRawPacket(
+    cmd: String,
+    isProto: Boolean,
+    content: ByteArray,
+    onResponse: ((FromServiceMsg) -> Unit)? = null //可选回调
+) {
+    QQInterfaces.sendBuffer(cmd, isProto, content, onResponse)
 }
 
 /**

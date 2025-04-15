@@ -22,7 +22,6 @@ import java.io.ByteArrayOutputStream
 import java.util.Arrays
 import java.util.UUID
 import java.util.zip.Deflater
-import moe.ono.service.QQInterfaces
 
 @HookItem(path = "API/QQMsgRespHandler")
 class QQMsgRespHandler : ApiHookItem() {
@@ -31,7 +30,6 @@ class QQMsgRespHandler : ApiHookItem() {
             val serviceMsg: ToServiceMsg = XField.obj(param.args[1]).name("toServiceMsg").get()
             val fromServiceMsg: FromServiceMsg =
                 XField.obj(param.args[1]).name("fromServiceMsg").get()
-            QQInterfaces.checkResponse(fromServiceMsg)
 
             val data = FunProtoData()
             data.fromBytes(

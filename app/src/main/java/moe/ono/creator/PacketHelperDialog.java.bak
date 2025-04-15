@@ -766,9 +766,7 @@ private void send_packet_msg(String text, String cmd) {
             //其他cmd
             cmdBytes = QPacketHelperKt.buildMessage(text);
         }
-        QPacketHelperKt.sendRawPacket(cmd, isProto, cmdBytes, fromMsg -> {
-            Toasts.success(getContext(), "收到消息" );
-            return null; );
+        QPacketHelperKt.sendRawPacket(cmd, isProto, cmdBytes);
         
         /*
         String sp = cmd.replace("OidbSvc.", "").replace("oidb_", "");
