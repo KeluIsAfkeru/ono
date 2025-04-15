@@ -104,7 +104,7 @@ fun sendPacket(cmd: String, content: String) {
 }
 
 //不会重新构建content
-fun sendRawPacket(cmd: String,isProto:Boolean, content: String) {
+fun sendRawPacket(cmd: String,isProto:Boolean, content: ByteArray) {
     QQInterfaces.sendBuffer(cmd, isProto, content)
 }
 
