@@ -89,17 +89,17 @@ import moe.ono.R;
 import moe.ono.bridge.Nt_kernel_bridge;
 import moe.ono.bridge.kernelcompat.ContactCompat;
 import moe.ono.hooks.protocol.QPacketHelperKt;
-import moe.ono.service.QQInterfaces
+import moe.ono.service.QQInterfaces;
 import moe.ono.hooks.base.util.Toasts;
 import moe.ono.util.AppRuntimeHelper;
-i/mport moe.ono.ui.CommonContextWrapper;
+import moe.ono.ui.CommonContextWrapper;
 import moe.ono.util.Logger;
 import moe.ono.util.SafUtils;
 import moe.ono.util.SyncUtils;
 import moe.ono.util.HostInfo;
 import tencent.im.oidb.oidb_sso.OIDBSSOPkg;
-import com.tencent.mobileqq.pb.ByteStringMicro
-import com.tencent.mobileqq.pb.MessageMicro
+import com.tencent.mobileqq.pb.ByteStringMicro;
+import com.tencent.mobileqq.pb.MessageMicro;
 
 @SuppressLint({"ResourceType", "StaticFieldLeak"})
 public class PacketHelperDialog extends BottomPopupView {
@@ -744,7 +744,7 @@ public class PacketHelperDialog extends BottomPopupView {
     }
 
     //发送packet消息的方法
-private fun send_packet_msg(text: String, cmd: String) {
+private send_packet_msg(text: String, cmd: String) {
     try {
         //将消息内容转为字节数组
         var body = QPacketHelperKt.buildMessage(text);
@@ -786,7 +786,7 @@ private fun send_packet_msg(text: String, cmd: String) {
     EditText editTextResult = view.findViewById(R.id.edit_text_result);
     Button btnCopy = view.findViewById(R.id.btn_copy_result);
     
-    result = formatJson(result)
+    result = formatJson(result);
 
     //返回内容到编辑框
     editTextResult.setText(result);
