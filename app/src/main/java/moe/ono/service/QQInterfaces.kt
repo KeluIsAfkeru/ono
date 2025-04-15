@@ -2,6 +2,8 @@ package moe.ono.service
 
 import com.tencent.common.app.AppInterface
 import com.tencent.qphone.base.remote.ToServiceMsg
+import com.tencent.qphone.base.remote.FromServiceMsg
+
 import com.tencent.qphone.base.remote.IBaseActionListener
 import mqq.app.MobileQQ
 
@@ -37,7 +39,7 @@ abstract class QQInterfaces {
     cmd: String,
     isProto: Boolean,
     data: ByteArray,
-    callback: (response: Any?) -> Unit
+    callback: (response: FromServiceMsg) -> Unit  // 修改回调参数类型为FromServiceMsg
 ) {
     val toServiceMsg = createToServiceMsg(cmd)
     toServiceMsg.putWupBuffer(data)
@@ -54,12 +56,16 @@ abstract class QQInterfaces {
 
     // 设置 actionListener
     toServiceMsg.actionListener = object : IBaseActionListener.Stub() {
-        override fun onActionResult(response: Any?) {
-            callback(response) //使用回调返回结果
+        override fun onActionResult(response: FromServiceMsg) {
+            callback(response) 
+        }
+        
+        override fun onRecvFromMsg(response: FromServiceMsg) {
+            
         }
     }
 
     sendToServiceMsg(toServiceMsg)
-}
+        }
     }
 }
