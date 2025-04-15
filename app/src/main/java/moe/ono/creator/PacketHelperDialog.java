@@ -744,7 +744,7 @@ public class PacketHelperDialog extends BottomPopupView {
     }
 
     //发送packet消息的方法
-private send_packet_msg(text: String, cmd: String) {
+private void send_packet_msg(text: String, cmd: String) {
     try {
         //将消息内容转为字节数组
         var body = QPacketHelperKt.buildMessage(text);
