@@ -757,9 +757,9 @@ private void send_packet_msg(String text, String cmd) {
         byte[] cmdBytes;
         boolean isProto = true;
         
-        if (cmd.startsWith("OidbSvcTrpcTcp")) {
+        if (cmd.startsWith("OidbSvcTrpcTcp.")) {
             cmdBytes = QPacketHelperKt.buildOidbSvcTrpcBytes(cmd, isProto, body, verName);
-        } else if (cmd.startsWith("OidbSvc")) {
+        } else if (cmd.startsWith("OidbSvc.")) {
             cmdBytes = QPacketHelperKt.buildOidbSvcBytes(cmd, isProto, body, verName);
         } else {
             //其他cmd
