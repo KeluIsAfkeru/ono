@@ -89,9 +89,10 @@ import moe.ono.R;
 import moe.ono.bridge.Nt_kernel_bridge;
 import moe.ono.bridge.kernelcompat.ContactCompat;
 import moe.ono.hooks.protocol.QPacketHelperKt;
+import moe.ono.service.QQInterfaces
 import moe.ono.hooks.base.util.Toasts;
 import moe.ono.util.AppRuntimeHelper;
-import moe.ono.ui.CommonContextWrapper;
+i/mport moe.ono.ui.CommonContextWrapper;
 import moe.ono.util.Logger;
 import moe.ono.util.SafUtils;
 import moe.ono.util.SyncUtils;
@@ -739,14 +740,66 @@ public class PacketHelperDialog extends BottomPopupView {
     }
 
     //发送packet消息的方法
-private void send_packet_msg(String content, String cmd) {
+private fun send_packet_msg(text: String, cmd: String) {
     try {
-        QPacketHelperKt.sendPacket(cmd, content); 
-        Toasts.success(getContext(), "发送成功");
-        dismiss();
+        //将消息内容转为字节数组
+        val data = QPacketHelperKt.buildMessage(text)
+        val isProto = true
+
+        QQInterfaces.sendBufferWithResponse(cmd, isProto, data) { response ->
+            //处理结果
+            val result = if (response != null) {
+                response.toString()
+            } else {
+                "未返回结果"
+            }
+
+            (getContext() as Activity).runOnUiThread {
+                showResultDialog(result)
+            }
+        }
+
+    } catch (e: Exception) {
+        e.printStackTrace()
+        Toasts.error(getContext(), "发送失败: ${e.message}")
+    }
+}
+
+    private void showResultDialog(String result) {
+    //创建弹窗
+    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+    builder.setTitle("发包返回结果");
+
+    //加载自定义布局
+    View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_result, null);
+    EditText editTextResult = view.findViewById(R.id.edit_text_result);
+    Button btnCopy = view.findViewById(R.id.btn_copy_result);
+    
+    result = formatJson(result)
+
+    //返回内容到编辑框
+    editTextResult.setText(result);
+
+    //复制按钮点击事件
+    btnCopy.setOnClickListener(v -> {
+        ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("返回结果", editTextResult.getText().toString());
+        clipboard.setPrimaryClip(clip);
+        Toasts.success(getContext(), "结果已复制到剪贴板");
+    });
+
+    builder.setView(view);
+    builder.setPositiveButton("关闭", (dialog, which) -> dialog.dismiss());
+    builder.show();
+}
+
+private String formatJson(String jsonStr) {
+    try {
+        JsonElement jsonElement = JsonParser.parseString(jsonStr); //解析JSON
+        Gson gson = new GsonBuilder().setPrettyPrinting().create(); 
+        return gson.toJson(jsonElement); //返回格式化JSON
     } catch (Exception e) {
-        Logger.e("发送Packet消息失败", e);
-        Toasts.error(getContext(), "发送失败: " + e.getMessage());
+        return jsonStr;
     }
 }
     

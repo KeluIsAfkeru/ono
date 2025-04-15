@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- 结果显示编辑框 -->
+    <EditText
+        android:id="@+id/edit_text_result"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@android:color/white"
+        android:gravity="start|top"
+        android:inputType="textMultiLine"
+        android:scrollbars="vertical"
+        android:textColor="@android:color/black"
+        android:focusable="false"
+        android:focusableInTouchMode="true"
+        android:padding="8dp" />
+
+    <!-- 竟然还有复制按钮耶 -->
+    <Button
+        android:id="@+id/btn_copy_result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="复制结果"
+        android:textColor="@android:color/white"
+        android:background="@color/purple_500" />
+</LinearLayout>
