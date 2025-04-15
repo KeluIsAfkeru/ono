@@ -29,7 +29,7 @@ abstract class QQInterfaces {
             isProto: Boolean,
             data: ByteArray,
             onResponse: ((FromServiceMsg) -> Unit)? = null //可选回调
-        ): Int{
+        ) {
             val toServiceMsg = createToServiceMsg(cmd)
             toServiceMsg.putWupBuffer(data)
             toServiceMsg.addAttribute("req_pb_protocol_flag", isProto)
