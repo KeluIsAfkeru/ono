@@ -111,9 +111,6 @@ fun sendPacket(
     QQInterfaces.sendBuffer(cmd, true, buildMessage(content), onResponse)
 }
 
-@JvmStatic
-fun sendPacket(cmd: String, content: String) = sendPacket(cmd, content, null)
-
 /**
  * 发送原始消息包
  * @param cmd 服务命令
@@ -129,9 +126,6 @@ fun sendRawPacket(
 ) {
     QQInterfaces.sendBuffer(cmd, isProto, content, onResponse)
 }
-
-@JvmStatic
-fun sendRawPacket(cmd: String, isProto: Boolean, content: String) = sendRawPacket(cmd, isProto, content, null)
 
 /**
  * 构建OIDB协议的ByteArray（直接传入JsonObject）
