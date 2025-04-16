@@ -767,7 +767,7 @@ private void send_packet_msg(String text, String cmd) {
             cmdBytes = QPacketHelperKt.buildMessage(text);
         }
         var seq = QPacketHelperKt.sendRawPacket(cmd, isProto, cmdBytes, fromMsg -> {
-            
+            Toasts.success(getContext(), "执行回调 " );
             return null; });
         Toasts.success(getContext(), "收到消息 " + seq );
         /*

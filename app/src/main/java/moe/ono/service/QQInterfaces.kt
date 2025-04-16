@@ -4,6 +4,7 @@ import com.tencent.common.app.AppInterface
 import com.tencent.qphone.base.remote.ToServiceMsg
 import com.tencent.qphone.base.remote.FromServiceMsg
 import mqq.app.MobileQQ
+import java.util.concurrent.atomic.AtomicInteger
 
 abstract class QQInterfaces {
 
@@ -14,7 +15,7 @@ abstract class QQInterfaces {
             MobileQQ.getMobileQQ().waitAppRuntime(null)) as AppInterface
             
         private val pendingRequests = mutableMapOf<Int, String>()
-        
+        private val sequenceGenerator = AtomicInteger(0)
 
         private fun sendToServiceMsg(to: ToServiceMsg) {
             app.sendToService(to)
@@ -35,6 +36,7 @@ abstract class QQInterfaces {
             toServiceMsg.addAttribute("req_pb_protocol_flag", isProto)
             sendToServiceMsg(toServiceMsg)
             
+            toServiceMsg.setAppSeq(sequenceGenerator.incrementAndGet())
             val appSeq = toServiceMsg.getAppSeq()
             pendingRequests[appSeq] = cmd
             onResponse?.let { responseCallbacks[appSeq] = it }
