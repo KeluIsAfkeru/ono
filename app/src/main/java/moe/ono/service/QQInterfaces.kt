@@ -38,6 +38,7 @@ abstract class QQInterfaces {
             val appSeq = toServiceMsg.getAppSeq()
             pendingRequests[appSeq] = cmd
             onResponse?.let { responseCallbacks[appSeq] = it }
+            return appSeq
         }
 
         /**
@@ -59,7 +60,7 @@ abstract class QQInterfaces {
                 
                 
             }
-            return appSeq
+            
         }
 
         // 存储回调
