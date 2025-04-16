@@ -766,10 +766,10 @@ private void send_packet_msg(String text, String cmd) {
             //其他cmd
             cmdBytes = QPacketHelperKt.buildMessage(text);
         }
-        QPacketHelperKt.sendRawPacket(cmd, isProto, cmdBytes, fromMsg -> {
-            Toasts.success(getContext(), "收到消息" );
+        var seq = QPacketHelperKt.sendRawPacket(cmd, isProto, cmdBytes, fromMsg -> {
+            
             return null; });
-        
+        Toasts.success(getContext(), "收到消息 " + seq );
         /*
         String sp = cmd.replace("OidbSvc.", "").replace("oidb_", "");
         String[] parts = sp.split("_");

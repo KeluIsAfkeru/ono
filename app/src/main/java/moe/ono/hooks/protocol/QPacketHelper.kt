@@ -125,8 +125,9 @@ fun sendRawPacket(
     isProto: Boolean,
     content: ByteArray,
     onResponse: ((FromServiceMsg) -> Unit)? = null //可选回调
-) {
-    QQInterfaces.sendBuffer(cmd, isProto, content, onResponse)
+): Int {
+    val seq = QQInterfaces.sendBuffer(cmd, isProto, content, onResponse)
+    return seq
 }
 
 /**
