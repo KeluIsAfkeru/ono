@@ -31,6 +31,7 @@ class QQMsgRespHandler : ApiHookItem() {
             val serviceMsg: ToServiceMsg = XField.obj(param.args[1]).name("toServiceMsg").get()
             val fromServiceMsg: FromServiceMsg =
                 XField.obj(param.args[1]).name("fromServiceMsg").get()
+
             QQInterfaces.checkResponse(fromServiceMsg)
 
             val data = FunProtoData()
@@ -41,6 +42,7 @@ class QQMsgRespHandler : ApiHookItem() {
             )
 
             val obj: JSONObject = data.toJSON()
+            Logger.d(JSONObject)
             when (fromServiceMsg.serviceCmd) {
                 "OidbSvcTrpcTcp.0x9067_202" -> {
                     Logger.d("on OidbSvcTrpcTcp.0x9067_202")
