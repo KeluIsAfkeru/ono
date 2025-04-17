@@ -42,7 +42,7 @@ class QQMsgRespHandler : ApiHookItem() {
             )
 
             val obj: JSONObject = data.toJSON()
-            Logger.d(JSONObject)
+            Logger.d("服务端收到: $obj")
             when (fromServiceMsg.serviceCmd) {
                 "OidbSvcTrpcTcp.0x9067_202" -> {
                     Logger.d("on OidbSvcTrpcTcp.0x9067_202")
